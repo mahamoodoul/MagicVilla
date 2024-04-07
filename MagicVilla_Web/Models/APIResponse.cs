@@ -1,6 +1,6 @@
 using System.Net;
 
-namespace MagicVillaAPI.Models
+namespace MagicVilla_Web.Models
 {
     public class APIResponse
     {
