@@ -1,4 +1,5 @@
 using MagicVilla_Web.Models.DTO;
+using VillaNumberCreateDTO = MagicVillaAPI.Models.DTO.VillaNumberCreateDTO;
 
 namespace MagicVilla_Web.Services.IServices
 {
