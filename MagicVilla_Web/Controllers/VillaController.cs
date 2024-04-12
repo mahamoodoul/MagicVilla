@@ -5,6 +5,7 @@ using MagicVilla_Web.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Reflection;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace MagicVilla_Web.Controllers
@@ -30,11 +31,15 @@ namespace MagicVilla_Web.Controllers
             }
             return View(list);
         }
-
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> CreateVilla()
         {
             return View();
         }
+        
+        
+        
+        [Authorize(Roles = "admin")]
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -65,6 +70,7 @@ namespace MagicVilla_Web.Controllers
             }
             return NotFound();
         }
+        [Authorize(Roles = "admin")]
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -82,6 +88,7 @@ namespace MagicVilla_Web.Controllers
             TempData["error"] = "Error encountered.";
             return View(model);
         }
+        [Authorize(Roles = "admin")]
 
         public async Task<IActionResult> DeleteVilla(int villaId)
         {
@@ -93,6 +100,7 @@ namespace MagicVilla_Web.Controllers
             }
             return NotFound();
         }
+        [Authorize(Roles = "admin")]
 
         [HttpPost]
         [ValidateAntiForgeryToken]
