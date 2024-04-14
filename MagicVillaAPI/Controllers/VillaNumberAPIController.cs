@@ -3,6 +3,7 @@ using AutoMapper;
 using MagicVillaAPI.Models;
 using MagicVillaAPI.Models.DTO;
 using MagicVillaAPI.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MagicVillaAPI.Controllers
@@ -80,6 +81,8 @@ namespace MagicVillaAPI.Controllers
             return _response;
         }
 
+        
+        [Authorize(Roles = "admin")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -121,6 +124,8 @@ namespace MagicVillaAPI.Controllers
             return _response;
         }
 
+        
+        [Authorize(Roles = "admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -152,6 +157,8 @@ namespace MagicVillaAPI.Controllers
             return _response;
         }
 
+        
+        [Authorize(Roles = "admin")]
         [HttpPut("{id:int}", Name = "UpdateVillaNumber")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
