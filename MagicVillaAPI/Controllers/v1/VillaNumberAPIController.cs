@@ -6,14 +6,13 @@ using MagicVillaAPI.Repository.IRepository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MagicVillaAPI.Controllers
+namespace MagicVillaAPI.Controllers.v1
 {
     // [Route("api/VillaNumberAPI")]
     [Route("api/v{version:apiVersion}/VillaNumberAPI")]
 
     [ApiController]
     [ApiVersion("1.0")]
-    [ApiVersion("2.0")]
 
     public class VillaNumberAPIController : ControllerBase
     {
@@ -26,13 +25,19 @@ namespace MagicVillaAPI.Controllers
         {
             _dbVillaNumber = dbVillaNumber;
             _mapper = mapper;
-            this._response = new();
+            _response = new();
             _dbVilla = dbVilla;
+        }
+        
+        
+        [HttpGet("GetString")]
+        public IEnumerable<string> Get()
+        {
+            return new string[] { "String1", "string2" };
         }
 
 
         [HttpGet]
-        [MapToApiVersion("1.0")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<APIResponse>> GetVillaNumbers()
         {
@@ -57,12 +62,12 @@ namespace MagicVillaAPI.Controllers
         
         
         
-        [MapToApiVersion("2.0")]
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
+        // [MapToApiVersion("2.0")]
+        // [HttpGet]
+        // public IEnumerable<string> Get()
+        // {
+        //     return new string[] { "value1", "value2" };
+        // }
 
         [HttpGet("{id:int}", Name = "GetVillaNumber")]
         [ProducesResponseType(StatusCodes.Status200OK)]

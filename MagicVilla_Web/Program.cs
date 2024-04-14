@@ -1,3 +1,4 @@
+using Asp.Versioning.Routing;
 using MagicVilla_Web;
 using MagicVilla_Web.Services;
 using MagicVilla_Web.Services.IServices;
@@ -32,6 +33,12 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+
+builder.Services.AddRouting(options =>
+{
+    options.ConstraintMap.Add("apiVersion", typeof(ApiVersionRouteConstraint));
+});
+
 
 var app = builder.Build();
 

@@ -1,5 +1,6 @@
 using System.Text;
 using MagicVillaAPI;
+using MagicVillaAPI.Controllers.v1;
 using MagicVillaAPI.Data;
 using MagicVillaAPI.Repository;
 using MagicVillaAPI.Repository.IRepository;
@@ -21,11 +22,13 @@ builder.Services.AddScoped<IVillaNumberRepository, VillaNumberRepository>();
 
 
 builder.Services.AddAutoMapper(typeof(MappingConfig));
+
 builder.Services.AddApiVersioning(options => {
     options.AssumeDefaultVersionWhenUnspecified = true;
-    options.DefaultApiVersion = new ApiVersion(2, 0);
+    options.DefaultApiVersion = new ApiVersion(1, 0);
     options.ReportApiVersions = true;
 });
+
 
 builder.Services.AddVersionedApiExplorer(options =>
 {
@@ -33,6 +36,23 @@ builder.Services.AddVersionedApiExplorer(options =>
     options.SubstituteApiVersionInUrl = true;
 
 });
+
+//
+// builder.Services.AddApiVersioning(options =>
+//     {
+//  
+//         options.ReportApiVersions = true;
+//         options.UnsupportedApiVersionStatusCode = 404; 
+//         options.AssumeDefaultVersionWhenUnspecified = true;
+//         options.DefaultApiVersion = new Asp.Versioning.ApiVersion(1, 0);
+//     })
+//     .AddMvc()
+//     .AddApiExplorer(options =>
+//     {
+//         options.GroupNameFormat = "'v'VVV";
+//         options.SubstituteApiVersionInUrl = true;
+//  
+//     });
 
 var key = builder.Configuration.GetValue<string>("ApiSettings:Secret");
 
@@ -58,6 +78,7 @@ builder.Services.AddControllers(option => {
 }).AddNewtonsoftJson().AddXmlDataContractSerializerFormatters();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerGen(options => {
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
@@ -86,6 +107,40 @@ builder.Services.AddSwaggerGen(options => {
             new List<string>()
         }
     });
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1.0",
+        Title = "Magic Villa V1",
+        Description = "API to manage Villa",
+        TermsOfService = new Uri("https://example.com/terms"),
+        Contact = new OpenApiContact
+        {
+            Name = "Dotnetmastery",
+            Url = new Uri("https://example.com/terms")
+        },
+        License = new OpenApiLicense
+        {
+            Name = "Example License",
+            Url = new Uri("https://example.com/license")
+        }
+    });
+    options.SwaggerDoc("v2", new OpenApiInfo
+    {
+        Version = "v2.0",
+        Title = "Magic Villa V2",
+        Description = "API to manage Villa",
+        TermsOfService = new Uri("https://example.com/terms"),
+        Contact = new OpenApiContact
+        {
+            Name = "Dotnetmastery",
+            Url = new Uri("https://example.com/terms")
+        },
+        License = new OpenApiLicense
+        {
+            Name = "Example License",
+            Url = new Uri("https://example.com/license")
+        }
+    });
 
 });
 
@@ -95,7 +150,11 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options => {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Magic_VillaV1");
+        options.SwaggerEndpoint("/swagger/v2/swagger.json", "Magic_VillaV2");
+
+    });
 }
 
 app.UseHttpsRedirection();
