@@ -16,6 +16,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(option => {
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultSQLConnection"));
 });
+
+builder.Services.AddResponseCaching();
+
 builder.Services.AddScoped<IVillaRepository, VillaRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IVillaNumberRepository, VillaNumberRepository>();
@@ -37,22 +40,6 @@ builder.Services.AddVersionedApiExplorer(options =>
 
 });
 
-//
-// builder.Services.AddApiVersioning(options =>
-//     {
-//  
-//         options.ReportApiVersions = true;
-//         options.UnsupportedApiVersionStatusCode = 404; 
-//         options.AssumeDefaultVersionWhenUnspecified = true;
-//         options.DefaultApiVersion = new Asp.Versioning.ApiVersion(1, 0);
-//     })
-//     .AddMvc()
-//     .AddApiExplorer(options =>
-//     {
-//         options.GroupNameFormat = "'v'VVV";
-//         options.SubstituteApiVersionInUrl = true;
-//  
-//     });
 
 var key = builder.Configuration.GetValue<string>("ApiSettings:Secret");
 
@@ -75,6 +62,11 @@ builder.Services.AddAuthentication(x =>
 
 builder.Services.AddControllers(option => { 
     // option.ReturnHttpNotAcceptable=true;
+    option.CacheProfiles.Add("Default30",
+        new CacheProfile()
+        {
+            Duration = 30
+        });
 }).AddNewtonsoftJson().AddXmlDataContractSerializerFormatters();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
