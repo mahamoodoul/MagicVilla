@@ -2,9 +2,11 @@ using System.Text;
 using MagicVillaAPI;
 using MagicVillaAPI.Controllers.v1;
 using MagicVillaAPI.Data;
+using MagicVillaAPI.Models;
 using MagicVillaAPI.Repository;
 using MagicVillaAPI.Repository.IRepository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -17,6 +19,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(option => {
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultSQLConnection"));
 });
 
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddResponseCaching();
 
 builder.Services.AddScoped<IVillaRepository, VillaRepository>();
