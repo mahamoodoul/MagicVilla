@@ -41,7 +41,18 @@ namespace MagicVilla_Web.Controllers
                 var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
                 // identity.AddClaim(new Claim(ClaimTypes.Name, model.User.UserName));
                 // identity.AddClaim(new Claim(ClaimTypes.Role, model.User.Role));
-                identity.AddClaim(new Claim(ClaimTypes.Name, jwt.Claims.FirstOrDefault(u => u.Type == "name").Value));
+                
+                var nameClaim = jwt.Claims.FirstOrDefault(u => u.Type == "name");
+                if (nameClaim != null)
+                {
+                    identity.AddClaim(new Claim(ClaimTypes.Name, nameClaim.Value));
+                }
+                else
+                {
+                    // Handle the case when the "name" claim is not found
+                    // You can throw an exception, log a warning, or take any other appropriate action.
+                }
+                // identity.AddClaim(new Claim(ClaimTypes.Name, jwt.Claims.FirstOrDefault(u => u.Type == "name").Value));
                 identity.AddClaim(new Claim(ClaimTypes.Role, jwt.Claims.FirstOrDefault(u=>u.Type=="role").Value));
                 var principal = new ClaimsPrincipal(identity);
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
